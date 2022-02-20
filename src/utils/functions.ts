@@ -1,26 +1,41 @@
 // import translatev2 from "translate-google";
 const { Translate } = require("@google-cloud/translate").v2;
 
-const CREDENTIALS = JSON.parse(process.env.GOOGLE_CREDENTIALS)
+const CREDENTIALS = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const translate = new Translate({
   credentials: CREDENTIALS,
   projectId: CREDENTIALS.project_id,
 });
 
-export const translateGoogle = async (parameter: string, value: string) => {
-  console.log(process.env.GOOGLE_CREDENTIALS)
-  const [translation] = await translate.translate(parameter, "es");
-  return { key: translation, value };
+const cleanKey = (key: string) => {
+  let data = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  data = data.replace(/[^\w\s]/gi, "");
+  data = data.toLowerCase();
+  data = fixAttribute(data);
+  return data;
 };
 
-const cleanKey = (key: string) => {
-  return key.toLowerCase();
-}
+const fixAttribute = (attr: string) => {
+  let [firstWord, ...otherWords] = attr.split(" ");
+  firstWord = firstWord == "ano" ? "anio" : firstWord;
 
-// const translateAttribute = async (parameter: string, value: string) => {
-//   let translation = await translatev2(parameter, { to: "es" });
-//   return { key: translation, value };
-// };
+  if (firstWord === "pelicula") return firstWord + otherWords[0];
+
+  if (otherWords.length) {
+    for (let word of otherWords) {
+      word = word.charAt(0).toUpperCase() + word.slice(1);
+      firstWord += word;
+    }
+  }
+
+  return firstWord;
+};
+
+export const translateGoogle = async (parameter: string, value: string) => {
+  let [translation] = await translate.translate(parameter, "es");
+  translation = translation ? cleanKey(translation) : translation;
+  return { key: translation, value };
+};
 
 export const modelsAttributesEnglishToSpanish = async (data: any) => {
   const promises = [];
