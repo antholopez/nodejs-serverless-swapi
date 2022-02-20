@@ -1,21 +1,19 @@
 service: nodejs-serverless-swapi
 
-provider:
-  name: aws
-  runtime: nodejs14.x
-  environment:
-    NODE_ENV: dev
-
 plugins:
   - serverless-plugin-typescript 
   - serverless-offline
+	
+useDotenv: true
 
-package:
-  exclude:
-    - config/.env.stg
-    - config/.env.pro
-  include:
-    - config/.env.dev
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  environment: 
+    NODE_ENV: ${env:NODE_ENV}
+    SWAPI_URL: ${env:SWAPI_URL}
+    GOOGLE_CREDENTIALS: ${env:GOOGLE_CREDENTIALS}
 
 functions:
   get-people:
