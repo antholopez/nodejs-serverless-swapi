@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { translateAttribute, translateGoogle } from "./functions";
+import { modelsAttributesEnglishToSpanish } from "./functions";
 
 export class Axios {
   static config(): AxiosInstance {
@@ -23,22 +23,8 @@ export class Axios {
     instance.interceptors.response.use(
       async (response) => {
         const { data } = response;
-        const promises = [];
-        let dataTransform = {};
-
-        for (const key in data) {
-          if (Object.prototype.hasOwnProperty.call(data, key)) {
-            const value = data[key];
-            promises.push(translateGoogle(key, value));
-          }
-        }
-        const result = await Promise.all(promises);
-        for (let i = 0; i < result.length; i++) {
-          const element = result[i];
-          dataTransform[element.key] = element.value;
-        }
-
-        return dataTransform;
+        const translateData = await modelsAttributesEnglishToSpanish(data);
+        return translateData;
       },
       (error) => {
         return Promise.reject(error);

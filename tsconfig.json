@@ -2,14 +2,15 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "lib": ["esnext"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "lib",
+    "outDir": "./build",
     "sourceMap": true,
-    "target": "esnext"
+    "baseUrl": "./",
+    "target": "es2017",
+    "removeComments": true,
   },
   "exclude": ["node_modules"]
 }

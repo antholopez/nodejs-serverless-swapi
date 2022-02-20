@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "local": "serverless offline",
+    "local": "rm -rf .build && serverless offline",
     "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit",
     "coverage": "nyc --reporter lcov npm run test"
@@ -16,7 +16,7 @@
   "dependencies": {
     "@google-cloud/translate": "^6.3.1",
     "axios": "^0.26.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.0.0",
     "mongoose": "^5.9.10",
     "translate-google": "^1.5.0"
   },
