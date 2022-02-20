@@ -6,8 +6,6 @@ export class SwapiService {
       const people = await Axios.config().get(`people/${id}`);
       return people;
     } catch (err) {
-      console.error(err.message);
-
       throw err;
     }
   }

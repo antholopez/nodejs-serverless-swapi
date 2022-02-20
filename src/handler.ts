@@ -1,5 +1,5 @@
 
-import { Handler } from 'aws-lambda';
+import { Handler, APIGatewayProxyEvent } from 'aws-lambda';
 import dotenv from 'dotenv';
 import path from 'path';
 const dotenvPath = path.join(__dirname, '../', `config/.env.${process.env.NODE_ENV}`);
@@ -11,6 +11,6 @@ dotenv.config({
 import { SwapiController } from './controller/swapi';
 const swapiController = new SwapiController();
 
-export const getPeople: Handler = (event: any) => {
+export const getPeople: Handler = (event: APIGatewayProxyEvent) => {
   return swapiController.getPeople(event);
 };

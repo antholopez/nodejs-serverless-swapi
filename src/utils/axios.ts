@@ -27,7 +27,12 @@ export class Axios {
         return translateData;
       },
       (error) => {
-        return Promise.reject(error);
+        const { status, statusText } = error.response
+        const response = {
+          code: status, 
+          message: statusText
+        }
+        throw response;
       }
     );
 
