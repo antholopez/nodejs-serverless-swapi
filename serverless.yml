@@ -16,11 +16,18 @@ provider:
     GOOGLE_CREDENTIALS: ${env:GOOGLE_CREDENTIALS}
 
 functions:
-  get-people:
+  getPerson:
+    handler: src/handler.getPerson
+    events:
+      - http:
+          path: person/{id}
+          method: get
+
+  getPeople:
     handler: src/handler.getPeople
     events:
       - http:
-          path: people/{id}
+          path: people/
           method: get
   # update:
   #   handler: app/handler.update

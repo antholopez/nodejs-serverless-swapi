@@ -37,8 +37,9 @@ export const translateGoogle = async (parameter: string, value: string) => {
   return { key: translation, value };
 };
 
-export const modelsAttributesEnglishToSpanish = async (data: any) => {
+export const translateToSpanish = async (data: any) => {
   const promises = [];
+
   let dataTransform = {};
 
   for (const key in data) {
@@ -54,4 +55,20 @@ export const modelsAttributesEnglishToSpanish = async (data: any) => {
   }
 
   return dataTransform;
+};
+
+export const modelsAttributesEnglishToSpanish = async (data: any) => {
+  if (data.results) {
+    const results = data.results;
+    if (!results.length) return results;
+
+    const newResults = [];
+    for (const result of results) {
+      let translate = await translateToSpanish(result);
+      newResults.push(translate);
+    }
+    return newResults;
+  }
+
+  return await translateToSpanish(data);
 };
