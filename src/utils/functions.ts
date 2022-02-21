@@ -1,3 +1,5 @@
+import { validateOrReject } from "class-validator";
+import moment from "moment-timezone";
 // import translatev2 from "translate-google";
 const { Translate } = require("@google-cloud/translate").v2;
 
@@ -6,6 +8,33 @@ const translate = new Translate({
   credentials: CREDENTIALS,
   projectId: CREDENTIALS.project_id,
 });
+
+export const validateInput = async (input: object) => {
+  try {
+    await validateOrReject(input, { validationError: { target: false } });
+  } catch (errors) {
+    let messages = [];
+    for (const error of errors) {
+      let { constraints } = error;
+      for (const key in constraints) {
+        if (Object.prototype.hasOwnProperty.call(constraints, key)) {
+          const value = constraints[key];
+          messages.push(value);
+        }
+      }
+    }
+    const allConstraints = messages.join(", ");
+    throw {
+      code: 400,
+      message: allConstraints,
+    };
+  }
+};
+
+export const dateToString = () => {
+  const timeZone = "America/Lima";
+  return moment().tz(timeZone).format();
+};
 
 const cleanKey = (key: string) => {
   let data = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");

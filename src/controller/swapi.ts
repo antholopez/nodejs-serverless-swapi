@@ -1,9 +1,11 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { MessageUtil } from '../utils/message';
-import { SwapiService } from '../service/swapi';
+import { APIGatewayProxyEvent } from "aws-lambda";
+import { MessageUtil } from "../utils/message";
+import { SwapiService } from "../service/swapi";
+import { CreateSpecieDto } from "../dto/create-specie.dto";
+import { validateInput } from "../utils/functions";
 
 export class SwapiController extends SwapiService {
-  async getPerson (event: APIGatewayProxyEvent) {
+  async getPerson(event: APIGatewayProxyEvent) {
     const id: number = Number(event.pathParameters.id);
 
     try {
@@ -11,7 +13,7 @@ export class SwapiController extends SwapiService {
 
       return MessageUtil.success(200, result);
     } catch (err) {
-      console.log(err)
+      console.log(err);
 
       return MessageUtil.error(err.code, err.message);
     }
@@ -24,7 +26,7 @@ export class SwapiController extends SwapiService {
 
       return MessageUtil.success(200, result);
     } catch (err) {
-      console.log(err)
+      console.log(err);
 
       return MessageUtil.error(err.code, err.message);
     }
@@ -32,12 +34,53 @@ export class SwapiController extends SwapiService {
 
   async createSpecie(event: APIGatewayProxyEvent) {
     try {
-      
-      const body = JSON.parse(event.body)
+      const body: CreateSpecieDto = JSON.parse(event.body);
+      let specie = new CreateSpecieDto();
+      specie.name = body.name;
+      specie.classification = body.classification;
+      specie.designation = body.designation;
+      specie.average_height = body.average_height;
+      specie.skin_colors = body.skin_colors;
+      specie.hair_colors = body.hair_colors;
+      specie.eye_colors = body.eye_colors;
+      specie.average_lifespan = body.average_lifespan;
+      specie.homeworld = body.homeworld;
+      specie.language = body.language;
+      specie.people = body.people;
+      specie.films = body.films;
+      specie.url = body.url;
 
-      return MessageUtil.success(201, body);
+      await validateInput(specie);
+
+      const newSpecie = await this.addSpecie(specie);
+
+      return MessageUtil.success(201, newSpecie);
     } catch (err) {
-      console.log(err)
+      console.log(err);
+
+      return MessageUtil.error(err.code, err.message);
+    }
+  }
+
+  async getSpecie(event: APIGatewayProxyEvent) {
+    const id = event.pathParameters.id;
+
+    try {
+      const specie = await this.findSpecie(id)
+      return MessageUtil.success(200, specie);
+    } catch (err) {
+      console.log(err);
+
+      return MessageUtil.error(err.code, err.message);
+    }
+  }
+
+  async getSpecies() {
+    try {
+      const species = await this.getAllSpecies()
+      return MessageUtil.success(200, species);
+    } catch (err) {
+      console.log(err);
 
       return MessageUtil.error(err.code, err.message);
     }

@@ -16,3 +16,11 @@ export const getPeople: Handler = (event: APIGatewayProxyEvent) => {
 export const createSpecie: Handler = (event: APIGatewayProxyEvent) => {
   return swapiController.createSpecie(event);
 };
+
+export const getSpecie: Handler = (event: APIGatewayProxyEvent) => {
+  return swapiController.getSpecie(event);
+};
+
+export const getSpecies: Handler = () => {
+  return swapiController.getSpecies();
+};

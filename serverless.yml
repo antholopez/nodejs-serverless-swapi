@@ -42,25 +42,20 @@ functions:
       - http:
           path: specie
           method: post
-  # find:
-  #   handler: app/handler.find
-  #   events:
-  #     - http:
-  #         path: books
-  #         method: get
-  # findOne:
-  #   handler: app/handler.findOne
-  #   events:
-  #     - http:
-  #         path: books/{id}
-  #         method: get
 
-  # deleteOne:
-  #   handler: app/handler.deleteOne
-  #   events:
-  #     - http:
-  #         path: books/{id}
-  #         method: delete
+  getSpecie:
+    handler: src/handler.getSpecie
+    events:
+      - http:
+          path: species/{id}
+          method: get
+
+  getSpecies:
+    handler: src/handler.getSpecies
+    events:
+      - http:
+          path: species/
+          method: get
 
 resources:
   Resources:

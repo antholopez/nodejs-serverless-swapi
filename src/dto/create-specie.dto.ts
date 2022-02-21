@@ -1,6 +1,9 @@
-import { IsArray, IsNumberString, IsString, IsUrl } from "class-validator";
-
+import { IsArray, IsNotEmpty, IsNumberString, IsString, IsUrl } from "class-validator";
+import { dateToString } from "../utils/functions";
+import { v4 } from "uuid";
 export class CreateSpecieDto {
+  id = v4() ;
+
   @IsString({ message: "name debe de ser una cadena." })
   name: string;
 
@@ -10,7 +13,8 @@ export class CreateSpecieDto {
   @IsString({ message: "designation debe de ser una cadena." })
   designation: string;
 
-  @IsNumberString({ message: "average_height debe de ser una cadena." })
+  @IsNotEmpty()
+  @IsNumberString({}, { message: "average_height debe de ser una cadena." })
   average_height: string;
 
   @IsString({ message: "skin_colors debe de ser una cadena." })
@@ -22,7 +26,7 @@ export class CreateSpecieDto {
   @IsString({ message: "eye_colors debe de ser una cadena." })
   eye_colors: string;
 
-  @IsNumberString({ message: "average_lifespan debe de ser una cadena." })
+  @IsNumberString({}, { message: "average_lifespan debe de ser una cadena." })
   average_lifespan: string;
 
   @IsString({ message: "homeworld debe de ser una cadena." })
@@ -36,6 +40,10 @@ export class CreateSpecieDto {
 
   @IsArray({ message: "films debe de ser un arreglo." })
   films: string[];
+
+  created = dateToString();
+
+  edited = dateToString();
 
   @IsUrl({ }, { message: "url debe de ser un url" })
   url: string;
