@@ -1,4 +1,8 @@
 import { Axios } from "./../utils/axios";
+import { v4 } from "uuid";
+
+import AWS from "aws-sdk";
+const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 export class SwapiService {
   protected async findPerson(id: number) {
@@ -19,4 +23,6 @@ export class SwapiService {
       throw err;
     }
   }
+
+  
 }

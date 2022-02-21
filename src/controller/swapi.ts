@@ -29,4 +29,17 @@ export class SwapiController extends SwapiService {
       return MessageUtil.error(err.code, err.message);
     }
   }
+
+  async createSpecie(event: APIGatewayProxyEvent) {
+    try {
+      
+      const body = JSON.parse(event.body)
+
+      return MessageUtil.success(201, body);
+    } catch (err) {
+      console.log(err)
+
+      return MessageUtil.error(err.code, err.message);
+    }
+  }
 }

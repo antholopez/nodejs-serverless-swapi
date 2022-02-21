@@ -10,6 +10,12 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - ${env:ARN}
   environment: 
     NODE_ENV: ${env:NODE_ENV}
     SWAPI_URL: ${env:SWAPI_URL}
@@ -29,12 +35,13 @@ functions:
       - http:
           path: people/
           method: get
-  # update:
-  #   handler: app/handler.update
-  #   events:
-  #     - http:
-  #         path: books/{id}
-  #         method: put
+          
+  createSpecie:
+    handler: src/handler.createSpecie
+    events:
+      - http:
+          path: specie
+          method: post
   # find:
   #   handler: app/handler.find
   #   events:
@@ -54,3 +61,17 @@ functions:
   #     - http:
   #         path: books/{id}
   #         method: delete
+
+resources:
+  Resources:
+    TaskTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: {env:DYNAMODB_NAME}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
