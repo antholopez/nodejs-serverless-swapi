@@ -1,11 +1,21 @@
 import { Axios } from "../utils/axios";
-// import { v4 } from "uuid";
 
 import { DynamoDB } from "aws-sdk";
 import { ISpecie } from "../interface/specie.interface";
 import { AxiosResponse } from "axios";
 
-const dynamodb = new DynamoDB.DocumentClient();
+const isTest = process.env.JEST_WORKER_ID;
+const dynamodb =
+  process.env.NODE_ENV === "test"
+    ? new DynamoDB.DocumentClient({
+        convertEmptyValues: true,
+        ...(isTest && {
+          endpoint: "localhost:8000",
+          sslEnabled: false,
+          region: "local-env",
+        }),
+      })
+    : new DynamoDB.DocumentClient();
 const TableName = process.env.DYNAMODB_NAME;
 
 export class SwapiService {

@@ -101,3 +101,7 @@ export const modelsAttributesEnglishToSpanish = async (data: any): Promise<any> 
 
   return await translateToSpanish(data);
 };
+
+export const sum = (a: number, b: number) => {
+  return a + b
+}
