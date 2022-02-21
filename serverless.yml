@@ -20,6 +20,7 @@ provider:
     NODE_ENV: ${env:NODE_ENV}
     SWAPI_URL: ${env:SWAPI_URL}
     GOOGLE_CREDENTIALS: ${env:GOOGLE_CREDENTIALS}
+    DYNAMODB_NAME: ${env:DYNAMODB_NAME}
 
 functions:
   getPerson:
@@ -59,10 +60,10 @@ functions:
 
 resources:
   Resources:
-    TaskTable:
+    SpeciesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: {env:DYNAMODB_NAME}
+        TableName: SpeciesTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
