@@ -1,4 +1,4 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyResult } from "aws-lambda";
 
 class Result {
   private statusCode: number;
@@ -13,7 +13,7 @@ class Result {
     this.data = data;
   }
 
-  bodyToString (): APIGatewayProxyResult {
+  bodyToString(): APIGatewayProxyResult {
     return {
       statusCode: this.statusCode,
       body: JSON.stringify({
@@ -26,13 +26,13 @@ class Result {
 }
 
 export class MessageUtil {
-  static success(code: number, data: object) {
-    const result = new Result(code, 1, 'success', data);
+  static success(code: number, data: object): APIGatewayProxyResult {
+    const result = new Result(code, 1, "success", data);
 
     return result.bodyToString();
   }
 
-  static error(code: number = 1000, message: string) {
+  static error(code: number = 1000, message: string): APIGatewayProxyResult {
     const result = new Result(code, 0, message);
 
     return result.bodyToString();

@@ -1,6 +1,6 @@
 import { validateOrReject } from "class-validator";
 import moment from "moment-timezone";
-// import translatev2 from "translate-google";
+import { IModel } from "../interface/model.inerface";
 const { Translate } = require("@google-cloud/translate").v2;
 
 const CREDENTIALS = JSON.parse(process.env.GOOGLE_CREDENTIALS);
@@ -9,7 +9,7 @@ const translate = new Translate({
   projectId: CREDENTIALS.project_id,
 });
 
-export const validateInput = async (input: object) => {
+export const validateInput = async (input: object): Promise<void> => {
   try {
     await validateOrReject(input, { validationError: { target: false } });
   } catch (errors) {
@@ -31,12 +31,12 @@ export const validateInput = async (input: object) => {
   }
 };
 
-export const dateToString = () => {
+export const dateToString = (): string => {
   const timeZone = "America/Lima";
   return moment().tz(timeZone).format();
 };
 
-const cleanKey = (key: string) => {
+const cleanKey = (key: string): string => {
   let data = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   data = data.replace(/[^\w\s]/gi, "");
   data = data.toLowerCase();
@@ -44,7 +44,7 @@ const cleanKey = (key: string) => {
   return data;
 };
 
-const fixAttribute = (attr: string) => {
+const fixAttribute = (attr: string): string => {
   let [firstWord, ...otherWords] = attr.split(" ");
   firstWord = firstWord == "ano" ? "anio" : firstWord;
 
@@ -60,13 +60,13 @@ const fixAttribute = (attr: string) => {
   return firstWord;
 };
 
-export const translateGoogle = async (parameter: string, value: string) => {
+export const translateGoogle = async (parameter: string, value: string): Promise<IModel> => {
   let [translation] = await translate.translate(parameter, "es");
   translation = translation ? cleanKey(translation) : translation;
   return { key: translation, value };
 };
 
-export const translateToSpanish = async (data: any) => {
+export const translateToSpanish = async (data: any): Promise<{}> => {
   const promises = [];
 
   let dataTransform = {};
@@ -86,7 +86,7 @@ export const translateToSpanish = async (data: any) => {
   return dataTransform;
 };
 
-export const modelsAttributesEnglishToSpanish = async (data: any) => {
+export const modelsAttributesEnglishToSpanish = async (data: any): Promise<any> => {
   if (data.results) {
     const results = data.results;
     if (!results.length) return results;

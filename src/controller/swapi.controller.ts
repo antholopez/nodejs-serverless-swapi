@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { MessageUtil } from "../utils/message";
-import { SwapiService } from "../service/swapi";
+import { SwapiService } from "../service/swapi.service";
 import { CreateSpecieDto } from "../dto/create-specie.dto";
 import { validateInput } from "../utils/functions";
 

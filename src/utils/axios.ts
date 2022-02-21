@@ -9,7 +9,6 @@ export class Axios {
 
     instance.defaults.timeout = 2500;
 
-    // Add a request interceptor
     instance.interceptors.request.use(
       (config) => {
         return config;
@@ -19,7 +18,6 @@ export class Axios {
       }
     );
 
-    // Add a response interceptor
     instance.interceptors.response.use(
       async (response) => {
         const { data } = response;
