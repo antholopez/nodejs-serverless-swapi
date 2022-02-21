@@ -1,4 +1,4 @@
-service: nodejs-serverless-swapi
+service: nodejs-apirest-serverless-swapi
 
 plugins:
   - serverless-plugin-typescript 
@@ -60,10 +60,10 @@ functions:
 
 resources:
   Resources:
-    SpeciesTable:
+    Swapi:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: SpeciesTable
+        TableName: ${env:DYNAMODB_NAME}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
